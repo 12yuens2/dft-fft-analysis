@@ -14,28 +14,42 @@ import fourier.FFT;
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @Fork(value=2)
 public class Test {
-
-	@Param({"1", "2"})
+	
+	public static double generateRandomDouble(double min, double max) {
+		Random random = new Random();
+		
+		return min + (random.nextDouble() * (max - min));
+	}
+	
+	public static Complex generateRandomComplex(double min, double max) {
+		double real = generateRandomDouble(min, max);
+		double imag = generateRandomDouble(min, max);
+		
+		return new Complex(real, imag);
+	}
+	
+	@Param({"1"})
 	public int arg;
 	
-	Complex[] cs = new Complex[0];
+	public Complex[] cs;
 	
 	@Setup(Level.Iteration)
 	public void prepare() {
-		Random random = new Random();
-		
 		cs = new Complex[arg];
-		for(int j = 0; j < arg; j++) {
-			double real = -Double.MIN_VALUE + (random.nextDouble() * (Double.MAX_VALUE - Double.MIN_VALUE));
-			double im = -Double.MIN_VALUE + (random.nextDouble() * (Double.MAX_VALUE - Double.MIN_VALUE));
-			cs[j] = new Complex(real, im);
-		}
 		
+		for(int j = 0; j < arg; j++) {
+			cs[j] = generateRandomComplex(-Double.MIN_VALUE, Double.MAX_VALUE);
+		}
 	}
 	
+//	@Benchmark
+//	public Complex[] dft() {
+//		return DFT.dft(cs);
+//	}
+	
 	@Benchmark
-	public Complex[] dft() {
-		return DFT.dft(cs);
+	public Complex[] fftButterfly() {
+		return FFT.fftButterfly(cs);
 	}
 	
 	@Benchmark
