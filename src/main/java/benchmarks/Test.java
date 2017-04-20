@@ -26,8 +26,8 @@ public class Test {
 		
 		cs = new Complex[arg];
 		for(int j = 0; j < arg; j++) {
-			double real = -Double.MIN_VALUE + (random.nextDouble() * (Double.MAX_VALUE - Double.MAX_VALUE));
-			double im = -Double.MIN_VALUE + (random.nextDouble() * (Double.MAX_VALUE - Double.MAX_VALUE));
+			double real = -Double.MIN_VALUE + (random.nextDouble() * (Double.MAX_VALUE - Double.MIN_VALUE));
+			double im = -Double.MIN_VALUE + (random.nextDouble() * (Double.MAX_VALUE - Double.MIN_VALUE));
 			cs[j] = new Complex(real, im);
 		}
 		
