@@ -21,6 +21,7 @@ public class Test {
 		return min + (random.nextDouble() * (max - min));
 	}
 	
+	/* Generate a random complex number */
 	public static Complex generateRandomComplex(double min, double max) {
 		double real = generateRandomDouble(min, max);
 		double imag = generateRandomDouble(min, max);
@@ -28,11 +29,13 @@ public class Test {
 		return new Complex(real, imag);
 	}
 	
+	/* Parameter of each benchmark iteration */
 	@Param({"1"})
 	public int arg;
 	
 	public Complex[] cs;
 	
+	/* Setup new list of complex numbers at the beginning of each iteration */
 	@Setup(Level.Iteration)
 	public void prepare() {
 		cs = new Complex[arg];
@@ -42,18 +45,24 @@ public class Test {
 		}
 	}
 	
-//	@Benchmark
-//	public Complex[] dft() {
-//		return DFT.dft(cs);
-//	}
+	@Benchmark
+	public Complex[] dft() {
+		return DFT.dft(cs);
+	}
 	
 	@Benchmark
-	public Complex[] fftButterfly() {
-		return FFT.fftButterfly(cs);
+	public Complex[] fftSmallOptimisation() {
+		return FFT.fftSimpleOptimisation(cs);
 	}
 	
 	@Benchmark
 	public Complex[] fft() {
 		return FFT.fft(cs);
+	}
+	
+	@Benchmark
+	public Complex[] fftInplace() {
+		FFT.fftInplace(cs);
+		return cs;
 	}
 }
